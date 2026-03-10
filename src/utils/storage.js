@@ -40,4 +40,30 @@ export function loadState() {
 export function clearAllData() {
   localStorage.removeItem(PROFILE_KEY);
   localStorage.removeItem(STATE_KEY);
+  localStorage.removeItem(ANALYTICS_KEY);
+}
+
+const ANALYTICS_KEY = 'teenstrong_analytics';
+
+export function saveAnalyticsEvent(event) {
+  try {
+    const data = localStorage.getItem(ANALYTICS_KEY);
+    const events = data ? JSON.parse(data) : [];
+    events.push({ ...event, timestamp: new Date().toISOString() });
+    // Keep last 500 events to avoid storage bloat
+    const trimmed = events.length > 500 ? events.slice(-500) : events;
+    localStorage.setItem(ANALYTICS_KEY, JSON.stringify(trimmed));
+  } catch (e) {
+    console.error('Failed to save analytics:', e);
+  }
+}
+
+export function loadAnalytics() {
+  try {
+    const data = localStorage.getItem(ANALYTICS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('Failed to load analytics:', e);
+    return [];
+  }
 }

@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useProfile } from './hooks/useProfile';
 import { useWorkout } from './hooks/useWorkout';
+import { saveAnalyticsEvent } from './utils/storage';
 import Onboarding from './components/Onboarding/Onboarding';
 import HomeScreen from './components/Home/HomeScreen';
 import ActiveWorkout from './components/Workout/ActiveWorkout';
@@ -13,7 +14,12 @@ export default function App() {
   const { state: workoutState, completeWorkout, isWorkoutCompleted, getCompletedCount, getCurrentWeekAndSession } = useWorkout();
 
   const [activeTab, setActiveTab] = useState('home');
-  const [activeWorkout, setActiveWorkout] = useState(null); // { weekIndex, sessionIndex }
+  const [activeWorkout, setActiveWorkout] = useState(null);
+
+  // Track app opens
+  useEffect(() => {
+    saveAnalyticsEvent({ type: 'app_open' });
+  }, []);
 
   const handleOnboardingComplete = useCallback((data) => {
     createProfile(data);
@@ -21,10 +27,12 @@ export default function App() {
 
   const handleStartWorkout = useCallback((weekIndex, sessionIndex) => {
     setActiveWorkout({ weekIndex, sessionIndex });
+    saveAnalyticsEvent({ type: 'workout_start', weekIndex, sessionIndex });
   }, []);
 
-  const handleWorkoutComplete = useCallback((weekIndex, sessionIndex, exerciseCount, durationMinutes) => {
-    completeWorkout(weekIndex, sessionIndex, exerciseCount, durationMinutes);
+  const handleWorkoutComplete = useCallback((weekIndex, sessionIndex, exerciseCount, durationMinutes, analytics) => {
+    completeWorkout(weekIndex, sessionIndex, exerciseCount, durationMinutes, analytics);
+    saveAnalyticsEvent({ type: 'workout_complete', weekIndex, sessionIndex, durationMinutes, ...analytics });
     setActiveWorkout(null);
   }, [completeWorkout]);
 
@@ -57,6 +65,7 @@ export default function App() {
           sessionIndex={activeWorkout.sessionIndex}
           onComplete={handleWorkoutComplete}
           onExit={handleExitWorkout}
+          profile={profile}
         />
       );
     }

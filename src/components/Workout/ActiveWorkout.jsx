@@ -1,23 +1,34 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getExerciseData } from '../../data/programBuilder';
+import { getExerciseData, getWeightSuggestion } from '../../data/programBuilder';
 import { getRestDuration } from '../../utils/timer';
 import Button from '../shared/Button';
 
-export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComplete, onExit }) {
+export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComplete, onExit, profile }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedIndexes, setCompletedIndexes] = useState(new Set());
   const [showRest, setShowRest] = useState(false);
   const [restTime, setRestTime] = useState(0);
   const [undoVisible, setUndoVisible] = useState(false);
   const [lastCompleted, setLastCompleted] = useState(null);
+  const [restSkipCount, setRestSkipCount] = useState(0);
+  const [difficulty, setDifficulty] = useState(null);
   const startTimeRef = useRef(Date.now());
+  const exerciseStartRef = useRef(Date.now());
+  const exerciseLogRef = useRef([]);
   const undoTimerRef = useRef(null);
+
+  const MAX_REST_SKIPS = 2;
 
   const exerciseIds = session.exercises;
   const total = exerciseIds.length;
   const exerciseData = getExerciseData(exerciseIds[currentIndex]);
   const isLastExercise = currentIndex === total - 1;
   const allDone = completedIndexes.size === total;
+
+  // Reset exercise timer when navigating to a new exercise
+  useEffect(() => {
+    exerciseStartRef.current = Date.now();
+  }, [currentIndex]);
 
   // Rest timer countdown
   useEffect(() => {
@@ -27,7 +38,6 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
         if (t <= 1) {
           clearInterval(interval);
           setShowRest(false);
-          // Auto-advance to next exercise
           if (!isLastExercise) {
             setCurrentIndex(i => i + 1);
           }
@@ -39,27 +49,34 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
     return () => clearInterval(interval);
   }, [showRest, restTime, isLastExercise]);
 
+  const logExercise = useCallback((idx, status) => {
+    const durationSeconds = Math.round((Date.now() - exerciseStartRef.current) / 1000);
+    exerciseLogRef.current.push({
+      exerciseId: exerciseIds[idx],
+      status,
+      durationSeconds,
+    });
+  }, [exerciseIds]);
+
   const markDone = useCallback(() => {
     const idx = currentIndex;
+    logExercise(idx, 'completed');
     setCompletedIndexes(prev => new Set([...prev, idx]));
     setLastCompleted(idx);
 
-    // Show undo toast
     setUndoVisible(true);
     clearTimeout(undoTimerRef.current);
     undoTimerRef.current = setTimeout(() => setUndoVisible(false), 5000);
 
     if (idx === total - 1) {
-      // Last exercise — show completion
       return;
     }
 
-    // Start rest timer
     const exercise = getExerciseData(exerciseIds[idx]);
     const restDuration = getRestDuration(exercise);
     setRestTime(restDuration);
     setShowRest(true);
-  }, [currentIndex, total, exerciseIds]);
+  }, [currentIndex, total, exerciseIds, logExercise]);
 
   const handleUndo = useCallback(() => {
     if (lastCompleted !== null) {
@@ -68,6 +85,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
         next.delete(lastCompleted);
         return next;
       });
+      exerciseLogRef.current.pop();
       setCurrentIndex(lastCompleted);
       setShowRest(false);
       setUndoVisible(false);
@@ -76,6 +94,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   }, [lastCompleted]);
 
   const skipRest = () => {
+    setRestSkipCount(c => c + 1);
     setShowRest(false);
     setRestTime(0);
     if (!isLastExercise) {
@@ -86,15 +105,59 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   const handleFinish = () => {
     const durationMinutes = Math.round((Date.now() - startTimeRef.current) / 60000);
     const exerciseCount = completedIndexes.size;
-    onComplete(weekIndex, sessionIndex, exerciseCount, durationMinutes);
+    onComplete(weekIndex, sessionIndex, exerciseCount, durationMinutes, {
+      exerciseLog: exerciseLogRef.current,
+      difficulty,
+      restSkipsUsed: restSkipCount,
+      startedAt: new Date(startTimeRef.current).toISOString(),
+    });
   };
 
+  // Weight suggestion for dumbbell exercises
+  const weightSuggestion = profile?.weightKg
+    ? getWeightSuggestion(profile.weightKg, exerciseIds[currentIndex], profile.weightUnit)
+    : null;
+
+  // Difficulty feedback screen (shown after all exercises done, before celebration)
+  if (allDone && difficulty === null) {
+    return (
+      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style={{ background: 'var(--bg)' }}>
+        <h1 className="text-3xl mb-2">HOW DID THAT FEEL?</h1>
+        <p className="text-sm mb-8" style={{ color: 'var(--text-mid)' }}>
+          This helps us fine-tune your program over time.
+        </p>
+        <div className="flex flex-col gap-3 w-full">
+          {[
+            { value: 'too_easy', label: 'Too Easy', desc: 'I could have done way more' },
+            { value: 'just_right', label: 'Just Right', desc: 'Challenging but doable' },
+            { value: 'too_hard', label: 'Too Hard', desc: 'I struggled to finish' },
+          ].map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => setDifficulty(opt.value)}
+              className="w-full rounded-xl p-4 text-left transition-all min-h-[44px]"
+              style={{
+                background: 'var(--bg-card)',
+                border: '2px solid var(--border)',
+                color: 'var(--text)',
+              }}
+            >
+              <p className="text-base font-semibold">{opt.label}</p>
+              <p className="text-sm" style={{ color: 'var(--text-dim)' }}>{opt.desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   // Workout complete overlay
-  if (allDone) {
+  if (allDone && difficulty !== null) {
     const durationMinutes = Math.round((Date.now() - startTimeRef.current) / 60000);
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
-        style={{ background: 'var(--bg)', maxWidth: 430, margin: '0 auto' }}>
+      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style={{ background: 'var(--bg)' }}>
         <div className="text-6xl mb-4">🎉</div>
         <h1 className="text-4xl mb-2" style={{ color: 'var(--accent)' }}>WORKOUT COMPLETE!</h1>
         <p className="text-lg mb-6" style={{ color: 'var(--text-mid)' }}>
@@ -110,23 +173,33 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
 
   // Rest timer overlay
   if (showRest) {
+    const canSkipRest = restSkipCount < MAX_REST_SKIPS;
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
-        style={{ background: 'var(--bg)', maxWidth: 430, margin: '0 auto' }}>
+      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style={{ background: 'var(--bg)' }}>
         <p className="text-sm mb-4" style={{ color: 'var(--text-mid)' }}>REST</p>
         <div className="text-8xl font-bold mb-6" style={{ fontFamily: 'Bebas Neue', color: 'var(--accent)' }}>
           {restTime}
         </div>
         <p className="text-sm mb-8" style={{ color: 'var(--text-dim)' }}>
-          Shake it out. Breathe. Get ready for the next one.
+          {canSkipRest
+            ? 'Shake it out. Breathe. Get ready for the next one.'
+            : 'No more skips — let your muscles recover!'}
         </p>
-        <Button variant="secondary" onClick={skipRest}>SKIP REST</Button>
+        {canSkipRest && (
+          <div className="flex flex-col items-center gap-2">
+            <Button variant="secondary" onClick={skipRest}>SKIP REST</Button>
+            <p className="text-xs" style={{ color: 'var(--text-dim)' }}>
+              {MAX_REST_SKIPS - restSkipCount} skip{MAX_REST_SKIPS - restSkipCount !== 1 ? 's' : ''} remaining
+            </p>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)', maxWidth: 430, margin: '0 auto' }}>
+    <div className="app-container min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
         <button onClick={onExit} className="text-sm min-w-[44px] min-h-[44px] flex items-center bg-transparent"
@@ -161,6 +234,11 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
               <p className="text-lg mt-1" style={{ color: 'var(--text-mid)' }}>
                 {exerciseData.sets}
               </p>
+              {weightSuggestion && (
+                <p className="text-sm mt-1" style={{ color: 'var(--blue)' }}>
+                  Suggested: {weightSuggestion}
+                </p>
+              )}
             </div>
 
             <div className="rounded-xl p-4" style={{ background: 'var(--bg-card)' }}>
@@ -179,7 +257,6 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
               </div>
             )}
 
-            {/* RPE guidance for main exercises */}
             {!exerciseData.isWarmup && !exerciseData.isCooldown && (
               <p className="text-xs italic" style={{ color: 'var(--text-dim)' }}>
                 Stop when you feel you could do 2-3 more reps. Muscle burn = normal. Sharp joint pain = stop immediately.

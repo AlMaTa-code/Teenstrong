@@ -1,7 +1,33 @@
 import exercises from './exercises';
 
+// Compute fitness score from assessment (1.0 - 4.0)
+function getFitnessScore(assessment) {
+  if (!assessment) return 2;
+  const vals = [assessment.pushups, assessment.squats, assessment.situps, assessment.plank].filter(Boolean);
+  if (vals.length === 0) return 2;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+// Suggest dumbbell weight based on bodyweight and exercise type
+export function getWeightSuggestion(weightKg, exerciseId, weightUnit) {
+  if (!weightKg || weightKg <= 0) return null;
+  const exercise = exercises[exerciseId];
+  if (!exercise || !exercise.isDumbbell) return null;
+
+  // AAP-safe starting points for teen beginners
+  const isLower = exercise.muscle?.includes('LEGS') || exercise.muscle?.includes('GLUTES');
+  const pct = isLower ? 0.2 : 0.12; // 20% BW for lower, 12% for upper (per hand)
+  const suggestionKg = Math.round(weightKg * pct * 2) / 2; // round to nearest 0.5kg
+  const clamped = Math.max(2, Math.min(suggestionKg, 15)); // 2-15kg safe range for teens
+
+  if (weightUnit === 'lbs') {
+    return `~${Math.round(clamped * 2.205)} lbs per hand`;
+  }
+  return `~${clamped} kg per hand`;
+}
+
 export function buildProgram(profile) {
-  const { ageGroup, experience, equipment } = profile;
+  const { ageGroup, experience, equipment, assessment } = profile;
 
   const hasBands = equipment === 'bands' || equipment === 'both';
   const hasDumbbells = equipment === 'dumbbells' || equipment === 'both';
@@ -100,13 +126,17 @@ export function buildProgram(profile) {
     },
   ];
 
-  // Determine starting week based on experience
+  // Determine starting week based on fitness assessment + experience
+  const fitnessScore = getFitnessScore(assessment);
   let startWeek = 0;
-  if (experience === 'regular' && !isYounger) {
-    startWeek = 1; // Start at Week 2
+
+  if (fitnessScore >= 2.5 && !isYounger) {
+    startWeek = 1; // Skip basics, start at Week 2
+  } else if (experience === 'regular' && !isYounger) {
+    startWeek = 1;
   }
 
-  return { weeks, startWeek };
+  return { weeks, startWeek, fitnessScore };
 }
 
 export function getExerciseData(exerciseId) {

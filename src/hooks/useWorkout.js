@@ -28,7 +28,7 @@ export function useWorkout() {
     });
   }, []);
 
-  const completeWorkout = useCallback((weekIndex, sessionIndex, exerciseCount, durationMinutes) => {
+  const completeWorkout = useCallback((weekIndex, sessionIndex, exerciseCount, durationMinutes, analytics) => {
     updateState(prev => {
       const today = new Date().toDateString();
       const lastDate = prev.lastWorkoutDate;
@@ -49,7 +49,13 @@ export function useWorkout() {
         ...prev,
         completedWorkouts: [
           ...prev.completedWorkouts,
-          { weekIndex, sessionIndex, completedAt: new Date().toISOString(), durationMinutes },
+          {
+            weekIndex,
+            sessionIndex,
+            completedAt: new Date().toISOString(),
+            durationMinutes,
+            ...(analytics || {}),
+          },
         ],
         currentStreak: newStreak,
         longestStreak,

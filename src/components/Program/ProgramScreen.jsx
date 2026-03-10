@@ -4,7 +4,7 @@ export default function ProgramScreen({ program, isWorkoutCompleted, onStartWork
   if (!program) return null;
 
   return (
-    <div className="flex flex-col gap-5 pb-24 px-4 pt-6" style={{ maxWidth: 430, margin: '0 auto' }}>
+    <div className="app-container flex flex-col gap-5 pb-24 px-4 pt-6">
       <h1 className="text-4xl">YOUR PROGRAM</h1>
       <p className="text-sm" style={{ color: 'var(--text-dim)' }}>
         4-week progressive program based on AAP & NSCA guidelines. 3 sessions per week on non-consecutive days.

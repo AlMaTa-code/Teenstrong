@@ -38,8 +38,8 @@ function ProgressIcon({ active }) {
 
 export default function BottomNav({ activeTab, onTabChange }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 flex justify-around items-center py-2 px-4 z-50"
-      style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border)', maxWidth: 430, margin: '0 auto' }}>
+    <nav className="app-container fixed bottom-0 left-0 right-0 flex justify-around items-center py-2 px-4 z-50"
+      style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border)' }}>
       {tabs.map(tab => {
         const Icon = tab.icon;
         const active = activeTab === tab.id;

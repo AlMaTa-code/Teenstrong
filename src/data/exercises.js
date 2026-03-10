@@ -187,6 +187,7 @@ const exercises = {
     sets: "2 sets × 12-15 reps",
     form: "Hold one dumbbell at chest level with both hands, elbows pointing down. Squat down keeping chest up. The weight in front forces good posture.",
     safety: "Start with the lightest dumbbell you have. This is one of the safest squat variations for teens because the front load keeps your spine upright.",
+    isDumbbell: true,
   },
   db_floor_press: {
     name: "Dumbbell Floor Press",
@@ -194,6 +195,7 @@ const exercises = {
     sets: "2 sets × 10-12 reps",
     form: "Lie on the floor with a dumbbell in each hand. Press up from chest level until arms are extended. Lower until elbows touch the floor.",
     safety: "The floor acts as a natural safety stop — your elbows can't drop too far, which protects your shoulders. Much safer than bench press for teens.",
+    isDumbbell: true,
   },
   db_row: {
     name: "Single-Arm Dumbbell Row",
@@ -201,6 +203,7 @@ const exercises = {
     sets: "2 sets × 10-12 each arm",
     form: "One hand and knee on a bench for support. Pull the dumbbell to your hip, squeezing your back. Lower slowly.",
     safety: "Keep your back flat — don't twist or rotate. If you can't keep form, the weight is too heavy.",
+    isDumbbell: true,
   },
   db_shoulder_press: {
     name: "Dumbbell Shoulder Press",
@@ -208,6 +211,7 @@ const exercises = {
     sets: "2 sets × 10-12 reps",
     form: "Seated or standing, dumbbells at shoulder height, palms forward. Press straight up overhead. Lower with control.",
     safety: "Don't arch your lower back. Keep core tight. If you need to lean back, the weight is too heavy. Seated is safer than standing.",
+    isDumbbell: true,
   },
   db_curl: {
     name: "Dumbbell Bicep Curls",
@@ -215,6 +219,7 @@ const exercises = {
     sets: "2 sets × 12-15 reps",
     form: "Stand with dumbbells at sides, palms forward. Curl up toward shoulders keeping elbows pinned. Lower slowly — the lowering phase builds just as much strength.",
     safety: "Don't swing your body. If you have to use momentum, the weight is too heavy.",
+    isDumbbell: true,
   },
   db_rdl: {
     name: "Dumbbell Romanian Deadlift",
@@ -222,6 +227,7 @@ const exercises = {
     sets: "2 sets × 10-12 reps",
     form: "Hold dumbbells in front of thighs. Hinge at hips, pushing them back while keeping a flat back. Lower dumbbells to about mid-shin, then squeeze glutes to stand up.",
     safety: "This is a hip hinge, not a squat. Keep the dumbbells close to your legs. If your lower back rounds, you're going too low — stop higher.",
+    isDumbbell: true,
   },
   db_lateral_raise: {
     name: "Dumbbell Lateral Raises",
@@ -229,6 +235,7 @@ const exercises = {
     sets: "2 sets × 12-15 reps",
     form: "Stand with dumbbells at sides. Raise arms out to shoulder height with a slight bend in elbows. Lower slowly.",
     safety: "Don't go above shoulder height — it can pinch your rotator cuff. Use very light weight for this one; shoulders fatigue fast.",
+    isDumbbell: true,
   },
 };
 

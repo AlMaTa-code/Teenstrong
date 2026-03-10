@@ -21,7 +21,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
   );
 
   return (
-    <div className="flex flex-col gap-5 pb-24 px-4 pt-6" style={{ maxWidth: 430, margin: '0 auto' }}>
+    <div className="app-container flex flex-col gap-5 pb-24 px-4 pt-6">
       {/* Header */}
       <div>
         <h1 className="text-4xl" style={{ color: 'var(--accent)' }}>TEENSTRONG</h1>

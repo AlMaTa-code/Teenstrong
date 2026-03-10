@@ -1,26 +1,56 @@
 import { useState } from 'react';
 import Button from '../shared/Button';
 
-const STEPS = ['welcome', 'age', 'experience', 'health', 'equipment', 'goal'];
+const STEPS = ['welcome', 'age', 'experience', 'assessment', 'health', 'equipment', 'measurements', 'goal'];
 
 export default function Onboarding({ onComplete }) {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
     ageGroup: null,
     experience: null,
+    assessment: { pushups: null, squats: null, situps: null, plank: null },
     healthFlags: [],
     equipment: null,
+    height: '',
+    heightUnit: 'cm',
+    heightFeet: '',
+    heightInches: '',
+    weight: '',
+    weightUnit: 'kg',
     goal: null,
   });
 
   const currentStep = STEPS[step];
+
+  const getHeightCm = () => {
+    if (data.heightUnit === 'cm') return parseFloat(data.height) || 0;
+    const ft = parseFloat(data.heightFeet) || 0;
+    const inch = parseFloat(data.heightInches) || 0;
+    return Math.round((ft * 30.48) + (inch * 2.54));
+  };
+
+  const getWeightKg = () => {
+    const w = parseFloat(data.weight) || 0;
+    return data.weightUnit === 'kg' ? w : Math.round(w * 0.4536);
+  };
+
   const canNext = () => {
     switch (currentStep) {
       case 'welcome': return true;
       case 'age': return data.ageGroup !== null && data.ageGroup !== 'under12';
       case 'experience': return data.experience !== null;
+      case 'assessment': {
+        const a = data.assessment;
+        return a.pushups !== null && a.squats !== null && a.situps !== null && a.plank !== null;
+      }
       case 'health': return data.healthFlags.length > 0 || data.healthFlags.includes('none');
       case 'equipment': return data.equipment !== null;
+      case 'measurements': {
+        if (data.heightUnit === 'cm') {
+          return parseFloat(data.height) > 0 && parseFloat(data.weight) > 0;
+        }
+        return (parseFloat(data.heightFeet) > 0 || parseFloat(data.heightInches) > 0) && parseFloat(data.weight) > 0;
+      }
       case 'goal': return data.goal !== null;
       default: return false;
     }
@@ -28,7 +58,17 @@ export default function Onboarding({ onComplete }) {
 
   const next = () => {
     if (step === STEPS.length - 1) {
-      onComplete(data);
+      onComplete({
+        ageGroup: data.ageGroup,
+        experience: data.experience,
+        assessment: data.assessment,
+        healthFlags: data.healthFlags,
+        equipment: data.equipment,
+        heightCm: getHeightCm(),
+        weightKg: getWeightKg(),
+        weightUnit: data.weightUnit,
+        goal: data.goal,
+      });
     } else {
       setStep(s => s + 1);
     }
@@ -36,6 +76,10 @@ export default function Onboarding({ onComplete }) {
 
   const handleSelect = (field, value) => {
     setData(d => ({ ...d, [field]: value }));
+  };
+
+  const handleAssessment = (field, value) => {
+    setData(d => ({ ...d, assessment: { ...d.assessment, [field]: value } }));
   };
 
   const handleHealthToggle = (value) => {
@@ -65,9 +109,41 @@ export default function Onboarding({ onComplete }) {
     </button>
   );
 
+  const SmallOption = ({ selected, onClick, children }) => (
+    <button
+      onClick={onClick}
+      className="flex-1 rounded-lg px-2 py-2 text-sm text-center transition-all min-h-[44px]"
+      style={{
+        background: selected ? 'var(--accent-dim)' : 'var(--bg-card)',
+        border: selected ? '2px solid var(--accent)' : '2px solid var(--border)',
+        color: selected ? 'var(--accent)' : 'var(--text)',
+      }}
+    >
+      {children}
+    </button>
+  );
+
+  const UnitToggle = ({ value, onChange, options }) => (
+    <div className="flex rounded-lg overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+      {options.map(opt => (
+        <button
+          key={opt.value}
+          onClick={() => onChange(opt.value)}
+          className="px-4 py-2 text-sm min-h-[44px] transition-all"
+          style={{
+            background: value === opt.value ? 'var(--accent-dim)' : 'var(--bg-card)',
+            color: value === opt.value ? 'var(--accent)' : 'var(--text-dim)',
+          }}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)', maxWidth: 430, margin: '0 auto' }}>
-      <div className="flex-1 flex flex-col justify-center px-6 py-8">
+    <div className="app-container min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+      <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto">
         {/* Welcome */}
         {currentStep === 'welcome' && (
           <div className="text-center flex flex-col items-center gap-6">
@@ -125,6 +201,54 @@ export default function Onboarding({ onComplete }) {
           </div>
         )}
 
+        {/* Fitness Assessment */}
+        {currentStep === 'assessment' && (
+          <div className="flex flex-col gap-5">
+            <div>
+              <h2 className="text-3xl mb-1">QUICK FITNESS CHECK</h2>
+              <p className="text-sm" style={{ color: 'var(--text-mid)' }}>
+                Don't worry about exact numbers — just pick the closest range. This helps us personalise your program.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Push-ups in one go?</p>
+              <div className="flex gap-2">
+                {[{ v: 1, l: '0-5' }, { v: 2, l: '6-15' }, { v: 3, l: '16-30' }, { v: 4, l: '30+' }].map(o => (
+                  <SmallOption key={o.v} selected={data.assessment.pushups === o.v} onClick={() => handleAssessment('pushups', o.v)}>{o.l}</SmallOption>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Squats in one go?</p>
+              <div className="flex gap-2">
+                {[{ v: 1, l: '0-10' }, { v: 2, l: '11-25' }, { v: 3, l: '26-50' }, { v: 4, l: '50+' }].map(o => (
+                  <SmallOption key={o.v} selected={data.assessment.squats === o.v} onClick={() => handleAssessment('squats', o.v)}>{o.l}</SmallOption>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sit-ups in one go?</p>
+              <div className="flex gap-2">
+                {[{ v: 1, l: '0-5' }, { v: 2, l: '6-15' }, { v: 3, l: '16-30' }, { v: 4, l: '30+' }].map(o => (
+                  <SmallOption key={o.v} selected={data.assessment.situps === o.v} onClick={() => handleAssessment('situps', o.v)}>{o.l}</SmallOption>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>How long can you hold a plank?</p>
+              <div className="flex gap-2">
+                {[{ v: 1, l: '<15s' }, { v: 2, l: '15-30s' }, { v: 3, l: '30-60s' }, { v: 4, l: '60s+' }].map(o => (
+                  <SmallOption key={o.v} selected={data.assessment.plank === o.v} onClick={() => handleAssessment('plank', o.v)}>{o.l}</SmallOption>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Health Screening */}
         {currentStep === 'health' && (
           <div className="flex flex-col gap-4">
@@ -173,6 +297,105 @@ export default function Onboarding({ onComplete }) {
             <OptionButton selected={data.equipment === 'both'} onClick={() => handleSelect('equipment', 'both')}>
               Bands + dumbbells
             </OptionButton>
+          </div>
+        )}
+
+        {/* Measurements */}
+        {currentStep === 'measurements' && (
+          <div className="flex flex-col gap-6">
+            <h2 className="text-3xl mb-1">YOUR MEASUREMENTS</h2>
+            <p className="text-sm" style={{ color: 'var(--text-mid)' }}>
+              This helps us suggest appropriate weights and track your progress.
+            </p>
+
+            {/* Height */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Height</p>
+                <UnitToggle
+                  value={data.heightUnit}
+                  onChange={(v) => setData(d => ({ ...d, heightUnit: v }))}
+                  options={[{ value: 'cm', label: 'cm' }, { value: 'ft', label: 'ft / in' }]}
+                />
+              </div>
+              {data.heightUnit === 'cm' ? (
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="e.g. 165"
+                  value={data.height}
+                  onChange={e => setData(d => ({ ...d, height: e.target.value }))}
+                  className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
+                  style={{
+                    background: 'var(--bg-card)',
+                    border: '2px solid var(--border)',
+                    color: 'var(--text)',
+                    outline: 'none',
+                  }}
+                />
+              ) : (
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="ft"
+                      value={data.heightFeet}
+                      onChange={e => setData(d => ({ ...d, heightFeet: e.target.value }))}
+                      className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
+                      style={{
+                        background: 'var(--bg-card)',
+                        border: '2px solid var(--border)',
+                        color: 'var(--text)',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="in"
+                      value={data.heightInches}
+                      onChange={e => setData(d => ({ ...d, heightInches: e.target.value }))}
+                      className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
+                      style={{
+                        background: 'var(--bg-card)',
+                        border: '2px solid var(--border)',
+                        color: 'var(--text)',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Weight */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Weight</p>
+                <UnitToggle
+                  value={data.weightUnit}
+                  onChange={(v) => setData(d => ({ ...d, weightUnit: v }))}
+                  options={[{ value: 'kg', label: 'kg' }, { value: 'lbs', label: 'lbs' }]}
+                />
+              </div>
+              <input
+                type="number"
+                inputMode="decimal"
+                placeholder={data.weightUnit === 'kg' ? 'e.g. 55' : 'e.g. 120'}
+                value={data.weight}
+                onChange={e => setData(d => ({ ...d, weight: e.target.value }))}
+                className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
+                style={{
+                  background: 'var(--bg-card)',
+                  border: '2px solid var(--border)',
+                  color: 'var(--text)',
+                  outline: 'none',
+                }}
+              />
+            </div>
           </div>
         )}
 

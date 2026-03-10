@@ -59,3 +59,21 @@ button:focus-visible {
   background: var(--text-dim);
   border-radius: 2px;
 }
+
+/* Responsive container */
+.app-container {
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 680px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-container {
+    max-width: 800px;
+  }
+}

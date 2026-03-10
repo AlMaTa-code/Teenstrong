@@ -10,7 +10,7 @@ export default function ProgressScreen({ workoutState }) {
   ];
 
   return (
-    <div className="flex flex-col gap-5 pb-24 px-4 pt-6" style={{ maxWidth: 430, margin: '0 auto' }}>
+    <div className="app-container flex flex-col gap-5 pb-24 px-4 pt-6">
       <h1 className="text-4xl">YOUR PROGRESS</h1>
 
       {/* Stats Grid */}
