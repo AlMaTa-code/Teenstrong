@@ -278,7 +278,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       </div>
 
       {/* Exercise Card */}
-      <div className="flex-1 flex flex-col justify-center px-5 py-6">
+      <div className="flex-1 flex flex-col justify-start px-5 py-6">
         {exerciseData && (
           <div className="flex flex-col gap-4">
             <div>
