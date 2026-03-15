@@ -16,6 +16,8 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   const exerciseStartRef = useRef(Date.now());
   const exerciseLogRef = useRef([]);
   const undoTimerRef = useRef(null);
+  const restDurationRef = useRef(0);
+  const restStartRef = useRef(0);
 
   const MAX_REST_SKIPS = 2;
 
@@ -30,24 +32,35 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
     exerciseStartRef.current = Date.now();
   }, [currentIndex]);
 
-  // Rest timer countdown
+  // Rest timer countdown — uses performance.now() so it stays accurate when tab is hidden
   useEffect(() => {
-    if (!showRest || restTime <= 0) return;
-    const interval = setInterval(() => {
-      setRestTime(t => {
-        if (t <= 1) {
-          clearInterval(interval);
-          setShowRest(false);
-          if (!isLastExercise) {
-            setCurrentIndex(i => i + 1);
-          }
-          return 0;
+    if (!showRest) return;
+    const duration = restDurationRef.current;
+    const startTime = restStartRef.current;
+
+    const tick = () => {
+      const elapsed = (performance.now() - startTime) / 1000;
+      const remaining = Math.max(0, Math.ceil(duration - elapsed));
+      setRestTime(remaining);
+      if (remaining <= 0) {
+        setShowRest(false);
+        if (!isLastExercise) {
+          setCurrentIndex(i => i + 1);
         }
-        return t - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [showRest, restTime, isLastExercise]);
+      }
+    };
+
+    const interval = setInterval(tick, 250);
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') tick();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [showRest, isLastExercise]);
 
   const logExercise = useCallback((idx, status) => {
     const durationSeconds = Math.round((Date.now() - exerciseStartRef.current) / 1000);
@@ -74,6 +87,8 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
 
     const exercise = getExerciseData(exerciseIds[idx]);
     const restDuration = getRestDuration(exercise);
+    restDurationRef.current = restDuration;
+    restStartRef.current = performance.now();
     setRestTime(restDuration);
     setShowRest(true);
   }, [currentIndex, total, exerciseIds, logExercise]);
@@ -171,16 +186,56 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
     );
   }
 
-  // Rest timer overlay
+  // Rest timer overlay with progress ring
   if (showRest) {
     const canSkipRest = restSkipCount < MAX_REST_SKIPS;
+    const totalDuration = restDurationRef.current || 1;
+    const progress = restTime / totalDuration;
+    const radius = 80;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference * (1 - progress);
+    const minutes = Math.floor(restTime / 60);
+    const seconds = restTime % 60;
+    const timeDisplay = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
     return (
       <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--bg)' }}>
-        <p className="text-sm mb-4" style={{ color: 'var(--text-mid)' }}>REST</p>
-        <div className="text-8xl font-bold mb-6" style={{ fontFamily: 'Bebas Neue', color: 'var(--accent)' }}>
-          {restTime}
+        {/* Progress Ring */}
+        <div style={{ position: 'relative', width: 200, height: 200, marginBottom: 24 }}>
+          <svg viewBox="0 0 200 200" width="200" height="200">
+            {/* Track */}
+            <circle
+              cx="100" cy="100" r={radius}
+              fill="none"
+              stroke="var(--bg-card)"
+              strokeWidth="8"
+            />
+            {/* Arc */}
+            <circle
+              cx="100" cy="100" r={radius}
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="8"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              style={{ transform: 'rotate(-90deg)', transformOrigin: '100px 100px', transition: 'stroke-dashoffset 0.3s' }}
+            />
+          </svg>
+          {/* Time inside ring */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+          }}>
+            <p className="text-sm" style={{ color: 'var(--text-mid)' }}>Rest</p>
+            <p className="text-4xl font-bold" style={{ fontFamily: 'Bebas Neue', color: 'var(--accent)' }}>
+              {timeDisplay}
+            </p>
+          </div>
         </div>
+
         <p className="text-sm mb-8" style={{ color: 'var(--text-dim)' }}>
           {canSkipRest
             ? 'Shake it out. Breathe. Get ready for the next one.'
@@ -217,7 +272,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
           className="h-full transition-all duration-300"
           style={{
             width: `${(completedIndexes.size / total) * 100}%`,
-            background: 'var(--accent)',
+            background: 'var(--blue)',
           }}
         />
       </div>
@@ -249,8 +304,8 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
             </div>
 
             {exerciseData.safety && (
-              <div className="rounded-xl p-4" style={{ background: 'var(--red-dim)', borderLeft: '3px solid var(--red)' }}>
-                <p className="text-sm font-semibold mb-1" style={{ color: 'var(--red)' }}>⚠ Safety</p>
+              <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', borderLeft: '3px solid var(--blue)' }}>
+                <p className="text-sm font-semibold mb-1" style={{ color: 'var(--blue)' }}>⚠ Safety</p>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
                   {exerciseData.safety}
                 </p>

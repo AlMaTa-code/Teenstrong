@@ -28,6 +28,9 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
         <p className="text-sm" style={{ color: 'var(--text-dim)' }}>
           {allDone ? 'Program Complete!' : `${currentWeek?.label || 'Your Program'}`}
         </p>
+        <p className="text-xs mt-1" style={{ color: 'var(--text-dim)' }}>
+          Build confidence. Feel powerful. Get stronger for sports and life.
+        </p>
       </div>
 
       {/* Disclaimer */}
@@ -59,6 +62,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
           <Button
             onClick={() => onStartWorkout(weekIndex, sessionIndex)}
             className="w-full"
+            variant={todayCompleted ? 'primary' : 'orange'}
             disabled={todayCompleted}
           >
             {todayCompleted ? 'COMPLETED' : 'START WORKOUT'}
@@ -106,7 +110,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
       {/* Stats Row */}
       <div className="flex gap-3">
         <div className="flex-1 rounded-xl p-3 text-center" style={{ background: 'var(--bg-card)' }}>
-          <p className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{workoutState.currentStreak}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--orange)' }}>{workoutState.currentStreak}</p>
           <p className="text-xs" style={{ color: 'var(--text-dim)' }}>Day Streak</p>
         </div>
         <div className="flex-1 rounded-xl p-3 text-center" style={{ background: 'var(--bg-card)' }}>

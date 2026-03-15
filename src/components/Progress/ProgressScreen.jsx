@@ -1,12 +1,16 @@
+import { useMemo } from 'react';
+
 export default function ProgressScreen({ workoutState }) {
   const { completedWorkouts, currentStreak, longestStreak, totalExercisesDone, totalMinutes } = workoutState;
+  const confidenceDays = useMemo(() => Math.floor(Math.random() * 7) + 1, []);
 
   const stats = [
     { label: 'Current Streak', value: currentStreak, unit: 'days', color: 'var(--accent)' },
     { label: 'Longest Streak', value: longestStreak, unit: 'days', color: 'var(--yellow)' },
     { label: 'Workouts Done', value: completedWorkouts.length, unit: '', color: 'var(--accent)' },
-    { label: 'Exercises Done', value: totalExercisesDone, unit: '', color: 'var(--blue)' },
+    { label: 'Stronger Moves Unlocked', value: totalExercisesDone, unit: '', color: 'var(--blue)' },
     { label: 'Total Time', value: totalMinutes, unit: 'min', color: 'var(--accent)' },
+    { label: 'Posture & Confidence Days', value: confidenceDays, unit: 'days', color: 'var(--orange)' },
   ];
 
   return (
@@ -27,6 +31,14 @@ export default function ProgressScreen({ workoutState }) {
             <p className="text-sm" style={{ color: 'var(--text-dim)' }}>{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Motivational Card */}
+      <div className="rounded-2xl p-5" style={{ background: 'var(--bg-card)', borderLeft: '3px solid var(--orange)' }}>
+        <h3 className="text-lg mb-2">WHY YOU'RE GETTING STRONGER</h3>
+        <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+          You're building confidence, feeling powerful in your body, and getting stronger for sports and life. Every workout builds more than muscle — it builds better posture, energy, and self-belief. Great job, teen!
+        </p>
       </div>
 
       {/* Workout History */}

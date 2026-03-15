@@ -1,5 +1,5 @@
 const typeStyles = {
-  safety: { borderColor: 'var(--red)', bg: 'var(--red-dim)', icon: '🛡️', label: 'Safety Tip' },
+  safety: { borderColor: 'var(--blue)', bg: 'var(--blue-dim)', icon: '🛡️', label: 'Safety Tip' },
   hydration: { borderColor: 'var(--blue)', bg: 'rgba(68, 138, 255, 0.12)', icon: '💧', label: 'Hydration' },
   science: { borderColor: 'var(--yellow)', bg: 'rgba(255, 214, 0, 0.12)', icon: '🧠', label: 'Did You Know?' },
 };

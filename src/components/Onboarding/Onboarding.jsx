@@ -153,7 +153,7 @@ export default function Onboarding({ onComplete }) {
             </div>
             <h1 className="text-5xl" style={{ color: 'var(--accent)' }}>TEENSTRONG</h1>
             <p className="text-lg" style={{ color: 'var(--text-mid)' }}>
-              The first evidence-based strength training app built specifically for teens.
+              Evidence-based strength training for teens. Build confidence, feel powerful in your body, and get stronger for sports and life.
             </p>
             <div className="rounded-lg px-4 py-2 text-sm"
               style={{ background: 'var(--accent-dim)', color: 'var(--accent)' }}>
@@ -176,8 +176,8 @@ export default function Onboarding({ onComplete }) {
               15-17
             </OptionButton>
             {data.ageGroup === 'under12' && (
-              <div className="rounded-xl p-4" style={{ background: 'var(--red-dim)', border: '1px solid var(--red)' }}>
-                <p className="text-sm" style={{ color: 'var(--red)' }}>
+              <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)' }}>
+                <p className="text-sm" style={{ color: 'var(--blue)' }}>
                   TeenStrong is designed for ages 12+. We recommend working with a coach in person for younger athletes.
                 </p>
               </div>
@@ -271,8 +271,8 @@ export default function Onboarding({ onComplete }) {
               </OptionButton>
             ))}
             {data.healthFlags.length > 0 && !data.healthFlags.includes('none') && (
-              <div className="rounded-xl p-4" style={{ background: 'var(--red-dim)', border: '1px solid var(--red)' }}>
-                <p className="text-sm" style={{ color: 'var(--red)' }}>
+              <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)' }}>
+                <p className="text-sm" style={{ color: 'var(--blue)' }}>
                   The AAP recommends young people with health conditions get medical clearance before starting.
                   Please show this to a parent/guardian and check with your doctor.
                 </p>

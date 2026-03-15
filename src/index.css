@@ -10,6 +10,9 @@
   --red-dim: rgba(255, 61, 61, 0.12);
   --yellow: #ffd600;
   --blue: #448aff;
+  --blue-dim: rgba(68, 138, 255, 0.12);
+  --orange: #FF9500;
+  --orange-dim: rgba(255, 149, 0, 0.15);
   --text: #e8e8ed;
   --text-dim: #7a7a8a;
   --text-mid: #9b9bab;

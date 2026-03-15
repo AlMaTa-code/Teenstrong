@@ -3,6 +3,7 @@ export default function Button({ children, onClick, variant = 'primary', disable
 
   const variants = {
     primary: "text-black",
+    orange: "text-black",
     secondary: "border",
     ghost: "bg-transparent",
   };
@@ -10,6 +11,10 @@ export default function Button({ children, onClick, variant = 'primary', disable
   const bgStyles = {
     primary: {
       background: disabled ? 'var(--text-dim)' : 'var(--accent)',
+      color: '#000',
+    },
+    orange: {
+      background: disabled ? 'var(--text-dim)' : 'var(--orange)',
       color: '#000',
     },
     secondary: {
