@@ -278,7 +278,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       </div>
 
       {/* Exercise Card */}
-      <div className="flex-1 flex flex-col justify-start px-5 py-6">
+      <div className="flex flex-col px-5 py-6">
         {exerciseData && (
           <div className="flex flex-col gap-4">
             <div>
@@ -322,7 +322,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       </div>
 
       {/* Bottom Actions */}
-      <div className="px-5 pb-8">
+      <div className="mt-auto px-5 pb-8 pt-6">
         {completedIndexes.has(currentIndex) ? (
           <div className="flex gap-3">
             {currentIndex < total - 1 && (
