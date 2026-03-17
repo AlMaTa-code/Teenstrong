@@ -103,7 +103,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
                 style={{
                   background: done ? 'var(--accent-dim)' : isCurrent ? 'var(--bg-card-hover)' : 'var(--bg)',
                   border: isCurrent ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  borderRadius: 8,
+                  borderRadius: 'var(--radius)',
                 }}
               >
                 <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{session.day}</p>
@@ -119,7 +119,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
       {/* Stats */}
       <div className="flex" style={{ gap: 12 }}>
         {[
-          { value: workoutState.currentStreak, label: 'Day Streak', color: 'var(--orange)' },
+          { value: workoutState.currentStreak, label: 'Day Streak', color: 'var(--accent)' },
           { value: workoutState.completedWorkouts.length, label: 'Workouts', color: 'var(--accent)' },
           { value: workoutState.totalMinutes, label: 'Minutes', color: 'var(--accent)' },
         ].map((stat, i) => (

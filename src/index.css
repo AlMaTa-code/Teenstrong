@@ -66,6 +66,16 @@ button:focus-visible {
   border-radius: 2px;
 }
 
+/* KProgressBar segment animation */
+@keyframes kpb-in {
+  from { opacity: 0; transform: skewX(-12deg) scaleX(0.3); }
+  to   { opacity: 1; transform: skewX(-12deg) scaleX(1); }
+}
+.kpb-segment {
+  opacity: 0;
+  animation: kpb-in 0.35s ease forwards;
+}
+
 /* Responsive container */
 .app-container {
   max-width: 430px;

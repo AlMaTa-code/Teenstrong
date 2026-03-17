@@ -6,7 +6,7 @@ export default function PrimaryButton({ children, onClick, disabled = false, cla
       className={`font-semibold text-base tracking-wide uppercase transition-all duration-200 min-h-[48px] w-full ${className}`}
       style={{
         background: disabled ? 'var(--text-muted)' : 'var(--accent)',
-        color: '#0d0d0f',
+        color: 'var(--bg)',
         borderRadius: 'var(--radius)',
         opacity: disabled ? 0.6 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
