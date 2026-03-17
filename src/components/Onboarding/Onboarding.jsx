@@ -98,7 +98,7 @@ export default function Onboarding({ onComplete }) {
   const OptionButton = ({ selected, onClick, children }) => (
     <button
       onClick={onClick}
-      className="w-full text-left rounded-xl p-4 text-base transition-all min-h-[44px]"
+      className="w-full text-center rounded-xl p-4 text-base transition-all min-h-[44px]"
       style={{
         background: selected ? 'var(--accent-dim)' : 'var(--bg-card)',
         border: selected ? '2px solid var(--accent)' : '2px solid var(--border)',
@@ -124,12 +124,12 @@ export default function Onboarding({ onComplete }) {
   );
 
   const UnitToggle = ({ value, onChange, options }) => (
-    <div className="flex rounded-lg overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+    <div className="flex w-full rounded-lg overflow-hidden" style={{ border: '1px solid var(--border)' }}>
       {options.map(opt => (
         <button
           key={opt.value}
           onClick={() => onChange(opt.value)}
-          className="px-4 py-2 text-sm min-h-[44px] transition-all"
+          className="flex-1 px-4 py-2 text-sm min-h-[44px] transition-all text-center"
           style={{
             background: value === opt.value ? 'var(--accent-dim)' : 'var(--bg-card)',
             color: value === opt.value ? 'var(--accent)' : 'var(--text-dim)',
@@ -142,7 +142,7 @@ export default function Onboarding({ onComplete }) {
   );
 
   return (
-    <div className="app-container min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="app-container min-h-dvh flex flex-col" style={{ background: 'var(--bg)' }}>
       <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto">
         {/* Welcome */}
         {currentStep === 'welcome' && (
@@ -159,6 +159,7 @@ export default function Onboarding({ onComplete }) {
               style={{ background: 'var(--accent-dim)', color: 'var(--accent)' }}>
               Based on AAP & NSCA guidelines
             </div>
+            <Button onClick={next} className="w-full mt-4">GET STARTED</Button>
           </div>
         )}
 
@@ -310,14 +311,12 @@ export default function Onboarding({ onComplete }) {
 
             {/* Height */}
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Height</p>
-                <UnitToggle
-                  value={data.heightUnit}
-                  onChange={(v) => setData(d => ({ ...d, heightUnit: v }))}
-                  options={[{ value: 'cm', label: 'cm' }, { value: 'ft', label: 'ft / in' }]}
-                />
-              </div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Height</p>
+              <UnitToggle
+                value={data.heightUnit}
+                onChange={(v) => setData(d => ({ ...d, heightUnit: v }))}
+                options={[{ value: 'cm', label: 'cm' }, { value: 'ft', label: 'ft / in' }]}
+              />
               {data.heightUnit === 'cm' ? (
                 <input
                   type="number"
@@ -373,14 +372,12 @@ export default function Onboarding({ onComplete }) {
 
             {/* Weight */}
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Weight</p>
-                <UnitToggle
-                  value={data.weightUnit}
-                  onChange={(v) => setData(d => ({ ...d, weightUnit: v }))}
-                  options={[{ value: 'kg', label: 'kg' }, { value: 'lbs', label: 'lbs' }]}
-                />
-              </div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Weight</p>
+              <UnitToggle
+                value={data.weightUnit}
+                onChange={(v) => setData(d => ({ ...d, weightUnit: v }))}
+                options={[{ value: 'kg', label: 'kg' }, { value: 'lbs', label: 'lbs' }]}
+              />
               <input
                 type="number"
                 inputMode="decimal"
@@ -419,10 +416,10 @@ export default function Onboarding({ onComplete }) {
         )}
       </div>
 
-      {/* Bottom area */}
-      <div className="px-6 pb-8 flex flex-col gap-3">
-        {/* Progress dots */}
-        {currentStep !== 'welcome' && (
+      {/* Bottom area — hidden on welcome since button is inline */}
+      {currentStep !== 'welcome' && (
+        <div className="px-6 pb-8 flex flex-col gap-3">
+          {/* Progress dots */}
           <div className="flex justify-center gap-2 mb-2">
             {STEPS.slice(1).map((s, i) => (
               <div
@@ -434,23 +431,23 @@ export default function Onboarding({ onComplete }) {
               />
             ))}
           </div>
-        )}
 
-        <div className="flex gap-3">
-          {step > 0 && (
-            <Button variant="ghost" onClick={() => setStep(s => s - 1)} className="flex-1">
-              BACK
+          <div className="flex gap-3">
+            {step > 0 && (
+              <Button variant="ghost" onClick={() => setStep(s => s - 1)} className="flex-1">
+                BACK
+              </Button>
+            )}
+            <Button
+              onClick={next}
+              disabled={!canNext()}
+              className="flex-1"
+            >
+              {currentStep === 'goal' ? 'BUILD MY PROGRAM' : 'NEXT'}
             </Button>
-          )}
-          <Button
-            onClick={next}
-            disabled={!canNext()}
-            className={step > 0 ? 'flex-1' : 'w-full'}
-          >
-            {currentStep === 'welcome' ? 'GET STARTED' : currentStep === 'goal' ? 'BUILD MY PROGRAM' : 'NEXT'}
-          </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

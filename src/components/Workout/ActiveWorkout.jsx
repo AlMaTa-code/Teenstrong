@@ -136,7 +136,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   // Difficulty feedback screen (shown after all exercises done, before celebration)
   if (allDone && difficulty === null) {
     return (
-      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+      <div className="app-container min-h-dvh flex flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--bg)' }}>
         <h1 className="text-3xl mb-2">HOW DID THAT FEEL?</h1>
         <p className="text-sm mb-8" style={{ color: 'var(--text-mid)' }}>
@@ -171,7 +171,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   if (allDone && difficulty !== null) {
     const durationMinutes = Math.round((Date.now() - startTimeRef.current) / 60000);
     return (
-      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+      <div className="app-container min-h-dvh flex flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--bg)' }}>
         <div className="text-6xl mb-4">🎉</div>
         <h1 className="text-4xl mb-2" style={{ color: 'var(--accent)' }}>WORKOUT COMPLETE!</h1>
@@ -199,7 +199,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
     const timeDisplay = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
     return (
-      <div className="app-container min-h-screen flex flex-col items-center justify-center px-6 text-center"
+      <div className="app-container min-h-dvh flex flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--bg)' }}>
         {/* Progress Ring */}
         <div style={{ position: 'relative', width: 200, height: 200, marginBottom: 24 }}>
@@ -254,7 +254,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
   }
 
   return (
-    <div className="app-container min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="app-container min-h-dvh flex flex-col" style={{ background: 'var(--bg)' }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
         <button onClick={onExit} className="text-sm min-w-[44px] min-h-[44px] flex items-center bg-transparent"
@@ -278,7 +278,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       </div>
 
       {/* Exercise Card */}
-      <div className="flex flex-col px-5 py-6">
+      <div className="flex-1 flex flex-col px-5 py-6 overflow-y-auto">
         {exerciseData && (
           <div className="flex flex-col gap-4">
             <div>
@@ -322,7 +322,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       </div>
 
       {/* Bottom Actions */}
-      <div className="mt-auto px-5 pb-8 pt-6">
+      <div className="px-5 pb-8 pt-4">
         {completedIndexes.has(currentIndex) ? (
           <div className="flex gap-3">
             {currentIndex < total - 1 && (
