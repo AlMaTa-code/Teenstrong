@@ -98,11 +98,14 @@ export default function Onboarding({ onComplete }) {
   const OptionButton = ({ selected, onClick, children }) => (
     <button
       onClick={onClick}
-      className="w-full text-center rounded-xl p-4 text-base transition-all min-h-[44px]"
+      className="w-full text-center transition-all min-h-[48px]"
       style={{
         background: selected ? 'var(--accent-dim)' : 'var(--bg-card)',
         border: selected ? '2px solid var(--accent)' : '2px solid var(--border)',
         color: selected ? 'var(--accent)' : 'var(--text)',
+        borderRadius: 'var(--radius)',
+        padding: '14px 16px',
+        fontSize: 15,
       }}
     >
       {children}
@@ -112,11 +115,14 @@ export default function Onboarding({ onComplete }) {
   const SmallOption = ({ selected, onClick, children }) => (
     <button
       onClick={onClick}
-      className="flex-1 rounded-lg px-2 py-2 text-sm text-center transition-all min-h-[44px]"
+      className="flex-1 text-center transition-all min-h-[44px]"
       style={{
         background: selected ? 'var(--accent-dim)' : 'var(--bg-card)',
         border: selected ? '2px solid var(--accent)' : '2px solid var(--border)',
         color: selected ? 'var(--accent)' : 'var(--text)',
+        borderRadius: 'var(--radius)',
+        padding: '10px 4px',
+        fontSize: 14,
       }}
     >
       {children}
@@ -124,15 +130,18 @@ export default function Onboarding({ onComplete }) {
   );
 
   const UnitToggle = ({ value, onChange, options }) => (
-    <div className="flex w-full rounded-lg overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+    <div className="flex w-full overflow-hidden" style={{ border: '1.5px solid var(--border)', borderRadius: 'var(--radius)' }}>
       {options.map(opt => (
         <button
           key={opt.value}
           onClick={() => onChange(opt.value)}
-          className="flex-1 px-4 py-2 text-sm min-h-[44px] transition-all text-center"
+          className="flex-1 text-center transition-all min-h-[44px]"
           style={{
             background: value === opt.value ? 'var(--accent-dim)' : 'var(--bg-card)',
-            color: value === opt.value ? 'var(--accent)' : 'var(--text-dim)',
+            color: value === opt.value ? 'var(--accent)' : 'var(--text-muted)',
+            padding: '10px 16px',
+            fontSize: 14,
+            fontWeight: 600,
           }}
         >
           {opt.label}
@@ -141,44 +150,64 @@ export default function Onboarding({ onComplete }) {
     </div>
   );
 
+  const inputStyle = {
+    background: 'var(--bg-card)',
+    border: '2px solid var(--border)',
+    color: 'var(--text)',
+    borderRadius: 'var(--radius)',
+    outline: 'none',
+    padding: '14px 16px',
+    fontSize: 15,
+    width: '100%',
+    minHeight: 48,
+  };
+
   return (
     <div className="app-container min-h-dvh flex flex-col" style={{ background: 'var(--bg)' }}>
-      <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto">
+      <div className="flex-1 flex flex-col justify-center overflow-y-auto" style={{ padding: '32px 16px' }}>
+
         {/* Welcome */}
         {currentStep === 'welcome' && (
-          <div className="text-center flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl"
-              style={{ background: 'var(--accent-dim)' }}>
+          <div className="text-center flex flex-col items-center" style={{ gap: 24 }}>
+            <div className="flex items-center justify-center text-4xl"
+              style={{ width: 72, height: 72, background: 'var(--accent-dim)', borderRadius: 'var(--radius)' }}>
               💪
             </div>
-            <h1 className="text-5xl" style={{ color: 'var(--accent)' }}>KALDR</h1>
-            <p className="text-lg" style={{ color: 'var(--text-mid)' }}>
+            <h1 style={{ fontSize: 42, color: 'var(--accent)', lineHeight: 1 }}>KALDR</h1>
+            <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.5, maxWidth: 320 }}>
               Evidence-based strength training for teens. Build confidence, feel powerful in your body, and get stronger for sports and life.
             </p>
-            <div className="rounded-lg px-4 py-2 text-sm"
-              style={{ background: 'var(--accent-dim)', color: 'var(--accent)' }}>
+            <div style={{
+              background: 'var(--accent-dim)',
+              color: 'var(--accent)',
+              borderRadius: 'var(--radius)',
+              padding: '8px 16px',
+              fontSize: 13,
+              fontWeight: 600,
+              letterSpacing: '0.02em',
+            }}>
               Based on AAP & NSCA guidelines
             </div>
-            <Button onClick={next} className="w-full mt-4">GET STARTED</Button>
+            <Button onClick={next} className="w-full" style={{ marginTop: 8 }}>GET STARTED</Button>
           </div>
         )}
 
         {/* Age */}
         {currentStep === 'age' && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl mb-2">HOW OLD ARE YOU?</h2>
+          <div className="flex flex-col" style={{ gap: 16 }}>
+            <h1 style={{ fontSize: 30, marginBottom: 8 }}>HOW OLD ARE YOU?</h1>
             <OptionButton selected={data.ageGroup === 'under12'} onClick={() => handleSelect('ageGroup', 'under12')}>
               Under 12
             </OptionButton>
             <OptionButton selected={data.ageGroup === '12-14'} onClick={() => handleSelect('ageGroup', '12-14')}>
-              12-14
+              12–14
             </OptionButton>
             <OptionButton selected={data.ageGroup === '15-17'} onClick={() => handleSelect('ageGroup', '15-17')}>
-              15-17
+              15–17
             </OptionButton>
             {data.ageGroup === 'under12' && (
-              <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)' }}>
-                <p className="text-sm" style={{ color: 'var(--blue)' }}>
+              <div style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)', borderRadius: 'var(--radius)', padding: 16 }}>
+                <p style={{ fontSize: 14, color: 'var(--blue)' }}>
                   KALDR is designed for ages 12+. We recommend working with a coach in person for younger athletes.
                 </p>
               </div>
@@ -188,8 +217,8 @@ export default function Onboarding({ onComplete }) {
 
         {/* Experience */}
         {currentStep === 'experience' && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl mb-2">FITNESS EXPERIENCE?</h2>
+          <div className="flex flex-col" style={{ gap: 16 }}>
+            <h1 style={{ fontSize: 30, marginBottom: 8 }}>FITNESS EXPERIENCE?</h1>
             <OptionButton selected={data.experience === 'beginner'} onClick={() => handleSelect('experience', 'beginner')}>
               Brand new to training
             </OptionButton>
@@ -204,59 +233,39 @@ export default function Onboarding({ onComplete }) {
 
         {/* Fitness Assessment */}
         {currentStep === 'assessment' && (
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col" style={{ gap: 20 }}>
             <div>
-              <h2 className="text-3xl mb-1">QUICK FITNESS CHECK</h2>
-              <p className="text-sm" style={{ color: 'var(--text-mid)' }}>
-                Don't worry about exact numbers — just pick the closest range. This helps us personalise your program.
+              <h1 style={{ fontSize: 30, marginBottom: 4 }}>QUICK FITNESS CHECK</h1>
+              <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
+                Don't worry about exact numbers — just pick the closest range.
               </p>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Push-ups in one go?</p>
-              <div className="flex gap-2">
-                {[{ v: 1, l: '0-5' }, { v: 2, l: '6-15' }, { v: 3, l: '16-30' }, { v: 4, l: '30+' }].map(o => (
-                  <SmallOption key={o.v} selected={data.assessment.pushups === o.v} onClick={() => handleAssessment('pushups', o.v)}>{o.l}</SmallOption>
-                ))}
+            {[
+              { label: 'Push-ups in one go?', field: 'pushups', opts: [{ v: 1, l: '0–5' }, { v: 2, l: '6–15' }, { v: 3, l: '16–30' }, { v: 4, l: '30+' }] },
+              { label: 'Squats in one go?', field: 'squats', opts: [{ v: 1, l: '0–10' }, { v: 2, l: '11–25' }, { v: 3, l: '26–50' }, { v: 4, l: '50+' }] },
+              { label: 'Sit-ups in one go?', field: 'situps', opts: [{ v: 1, l: '0–5' }, { v: 2, l: '6–15' }, { v: 3, l: '16–30' }, { v: 4, l: '30+' }] },
+              { label: 'Plank hold?', field: 'plank', opts: [{ v: 1, l: '<15s' }, { v: 2, l: '15–30s' }, { v: 3, l: '30–60s' }, { v: 4, l: '60s+' }] },
+            ].map(q => (
+              <div key={q.field} className="flex flex-col" style={{ gap: 8 }}>
+                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{q.label}</p>
+                <div className="flex" style={{ gap: 8 }}>
+                  {q.opts.map(o => (
+                    <SmallOption key={o.v} selected={data.assessment[q.field] === o.v} onClick={() => handleAssessment(q.field, o.v)}>{o.l}</SmallOption>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Squats in one go?</p>
-              <div className="flex gap-2">
-                {[{ v: 1, l: '0-10' }, { v: 2, l: '11-25' }, { v: 3, l: '26-50' }, { v: 4, l: '50+' }].map(o => (
-                  <SmallOption key={o.v} selected={data.assessment.squats === o.v} onClick={() => handleAssessment('squats', o.v)}>{o.l}</SmallOption>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sit-ups in one go?</p>
-              <div className="flex gap-2">
-                {[{ v: 1, l: '0-5' }, { v: 2, l: '6-15' }, { v: 3, l: '16-30' }, { v: 4, l: '30+' }].map(o => (
-                  <SmallOption key={o.v} selected={data.assessment.situps === o.v} onClick={() => handleAssessment('situps', o.v)}>{o.l}</SmallOption>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>How long can you hold a plank?</p>
-              <div className="flex gap-2">
-                {[{ v: 1, l: '<15s' }, { v: 2, l: '15-30s' }, { v: 3, l: '30-60s' }, { v: 4, l: '60s+' }].map(o => (
-                  <SmallOption key={o.v} selected={data.assessment.plank === o.v} onClick={() => handleAssessment('plank', o.v)}>{o.l}</SmallOption>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         )}
 
         {/* Health Screening */}
         {currentStep === 'health' && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl mb-2">HEALTH CHECK</h2>
-            <p className="text-sm mb-2" style={{ color: 'var(--text-mid)' }}>
-              Select any that apply:
-            </p>
+          <div className="flex flex-col" style={{ gap: 16 }}>
+            <div>
+              <h1 style={{ fontSize: 30, marginBottom: 4 }}>HEALTH CHECK</h1>
+              <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Select any that apply:</p>
+            </div>
             {[
               { value: 'heart', label: 'Heart condition' },
               { value: 'injury', label: 'Recent injury or surgery' },
@@ -272,8 +281,8 @@ export default function Onboarding({ onComplete }) {
               </OptionButton>
             ))}
             {data.healthFlags.length > 0 && !data.healthFlags.includes('none') && (
-              <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)' }}>
-                <p className="text-sm" style={{ color: 'var(--blue)' }}>
+              <div style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)', borderRadius: 'var(--radius)', padding: 16 }}>
+                <p style={{ fontSize: 14, color: 'var(--blue)' }}>
                   The AAP recommends young people with health conditions get medical clearance before starting.
                   Please show this to a parent/guardian and check with your doctor.
                 </p>
@@ -284,8 +293,8 @@ export default function Onboarding({ onComplete }) {
 
         {/* Equipment */}
         {currentStep === 'equipment' && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl mb-2">WHAT EQUIPMENT DO YOU HAVE?</h2>
+          <div className="flex flex-col" style={{ gap: 16 }}>
+            <h1 style={{ fontSize: 30, marginBottom: 8 }}>EQUIPMENT?</h1>
             <OptionButton selected={data.equipment === 'none'} onClick={() => handleSelect('equipment', 'none')}>
               Nothing (bodyweight only)
             </OptionButton>
@@ -303,15 +312,17 @@ export default function Onboarding({ onComplete }) {
 
         {/* Measurements */}
         {currentStep === 'measurements' && (
-          <div className="flex flex-col gap-6">
-            <h2 className="text-3xl mb-1">YOUR MEASUREMENTS</h2>
-            <p className="text-sm" style={{ color: 'var(--text-mid)' }}>
-              This helps us suggest appropriate weights and track your progress.
-            </p>
+          <div className="flex flex-col" style={{ gap: 24 }}>
+            <div>
+              <h1 style={{ fontSize: 30, marginBottom: 4 }}>YOUR MEASUREMENTS</h1>
+              <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
+                This helps us suggest appropriate weights and track your progress.
+              </p>
+            </div>
 
             {/* Height */}
-            <div className="flex flex-col gap-3">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Height</p>
+            <div className="flex flex-col" style={{ gap: 12 }}>
+              <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Height</p>
               <UnitToggle
                 value={data.heightUnit}
                 onChange={(v) => setData(d => ({ ...d, heightUnit: v }))}
@@ -324,55 +335,33 @@ export default function Onboarding({ onComplete }) {
                   placeholder="e.g. 165"
                   value={data.height}
                   onChange={e => setData(d => ({ ...d, height: e.target.value }))}
-                  className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
-                  style={{
-                    background: 'var(--bg-card)',
-                    border: '2px solid var(--border)',
-                    color: 'var(--text)',
-                    outline: 'none',
-                  }}
+                  style={inputStyle}
                 />
               ) : (
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      placeholder="ft"
-                      value={data.heightFeet}
-                      onChange={e => setData(d => ({ ...d, heightFeet: e.target.value }))}
-                      className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
-                      style={{
-                        background: 'var(--bg-card)',
-                        border: '2px solid var(--border)',
-                        color: 'var(--text)',
-                        outline: 'none',
-                      }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      placeholder="in"
-                      value={data.heightInches}
-                      onChange={e => setData(d => ({ ...d, heightInches: e.target.value }))}
-                      className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
-                      style={{
-                        background: 'var(--bg-card)',
-                        border: '2px solid var(--border)',
-                        color: 'var(--text)',
-                        outline: 'none',
-                      }}
-                    />
-                  </div>
+                <div className="flex" style={{ gap: 12 }}>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="ft"
+                    value={data.heightFeet}
+                    onChange={e => setData(d => ({ ...d, heightFeet: e.target.value }))}
+                    style={{ ...inputStyle, flex: 1 }}
+                  />
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="in"
+                    value={data.heightInches}
+                    onChange={e => setData(d => ({ ...d, heightInches: e.target.value }))}
+                    style={{ ...inputStyle, flex: 1 }}
+                  />
                 </div>
               )}
             </div>
 
             {/* Weight */}
-            <div className="flex flex-col gap-3">
-              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Weight</p>
+            <div className="flex flex-col" style={{ gap: 12 }}>
+              <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Weight</p>
               <UnitToggle
                 value={data.weightUnit}
                 onChange={(v) => setData(d => ({ ...d, weightUnit: v }))}
@@ -384,13 +373,7 @@ export default function Onboarding({ onComplete }) {
                 placeholder={data.weightUnit === 'kg' ? 'e.g. 55' : 'e.g. 120'}
                 value={data.weight}
                 onChange={e => setData(d => ({ ...d, weight: e.target.value }))}
-                className="w-full rounded-xl px-4 py-3 text-base min-h-[44px]"
-                style={{
-                  background: 'var(--bg-card)',
-                  border: '2px solid var(--border)',
-                  color: 'var(--text)',
-                  outline: 'none',
-                }}
+                style={inputStyle}
               />
             </div>
           </div>
@@ -398,8 +381,8 @@ export default function Onboarding({ onComplete }) {
 
         {/* Goal */}
         {currentStep === 'goal' && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl mb-2">WHAT'S YOUR GOAL?</h2>
+          <div className="flex flex-col" style={{ gap: 16 }}>
+            <h1 style={{ fontSize: 30, marginBottom: 8 }}>YOUR GOAL?</h1>
             <OptionButton selected={data.goal === 'stronger'} onClick={() => handleSelect('goal', 'stronger')}>
               Get stronger
             </OptionButton>
@@ -418,21 +401,23 @@ export default function Onboarding({ onComplete }) {
 
       {/* Bottom area — hidden on welcome since button is inline */}
       {currentStep !== 'welcome' && (
-        <div className="px-6 pb-8 flex flex-col gap-3">
-          {/* Progress dots */}
-          <div className="flex justify-center gap-2 mb-2">
+        <div className="flex flex-col" style={{ padding: '0 16px 32px', gap: 12 }}>
+          {/* Segmented progress */}
+          <div className="flex" style={{ gap: 4 }}>
             {STEPS.slice(1).map((s, i) => (
               <div
                 key={s}
-                className="w-2 h-2 rounded-full"
+                className="flex-1"
                 style={{
-                  background: i <= step - 1 ? 'var(--accent)' : 'var(--text-dim)',
+                  height: 3,
+                  borderRadius: 2,
+                  background: i <= step - 1 ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
                 }}
               />
             ))}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex" style={{ gap: 12 }}>
             {step > 0 && (
               <Button variant="ghost" onClick={() => setStep(s => s - 1)} className="flex-1">
                 BACK

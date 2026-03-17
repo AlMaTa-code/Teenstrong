@@ -42,7 +42,7 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+      <div className="min-h-dvh flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <div className="text-2xl" style={{ color: 'var(--accent)', fontFamily: 'Bebas Neue' }}>KALDR</div>
       </div>
     );
@@ -72,7 +72,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-dvh" style={{ background: 'var(--bg)' }}>
       {activeTab === 'home' && (
         <HomeScreen
           profile={profile}

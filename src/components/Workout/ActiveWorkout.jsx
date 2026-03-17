@@ -139,7 +139,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       <div className="app-container min-h-dvh flex flex-col items-center justify-center px-6 text-center"
         style={{ background: 'var(--bg)' }}>
         <h1 className="text-3xl mb-2">HOW DID THAT FEEL?</h1>
-        <p className="text-sm mb-8" style={{ color: 'var(--text-mid)' }}>
+        <p className="text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
           This helps us fine-tune your program over time.
         </p>
         <div className="flex flex-col gap-3 w-full">
@@ -159,7 +159,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
               }}
             >
               <p className="text-base font-semibold">{opt.label}</p>
-              <p className="text-sm" style={{ color: 'var(--text-dim)' }}>{opt.desc}</p>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{opt.desc}</p>
             </button>
           ))}
         </div>
@@ -175,10 +175,10 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
         style={{ background: 'var(--bg)' }}>
         <div className="text-6xl mb-4">🎉</div>
         <h1 className="text-4xl mb-2" style={{ color: 'var(--accent)' }}>WORKOUT COMPLETE!</h1>
-        <p className="text-lg mb-6" style={{ color: 'var(--text-mid)' }}>
+        <p className="text-lg mb-6" style={{ color: 'var(--text-secondary)' }}>
           {session.label} — {total} exercises in {durationMinutes || 1} min
         </p>
-        <p className="text-sm mb-8" style={{ color: 'var(--text-dim)' }}>
+        <p className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>
           Consistency beats intensity. You showed up — that's what matters.
         </p>
         <Button onClick={handleFinish} className="w-full">DONE</Button>
@@ -229,14 +229,14 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center',
           }}>
-            <p className="text-sm" style={{ color: 'var(--text-mid)' }}>Rest</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Rest</p>
             <p className="text-4xl font-bold" style={{ fontFamily: 'Bebas Neue', color: 'var(--accent)' }}>
               {timeDisplay}
             </p>
           </div>
         </div>
 
-        <p className="text-sm mb-8" style={{ color: 'var(--text-dim)' }}>
+        <p className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>
           {canSkipRest
             ? 'Shake it out. Breathe. Get ready for the next one.'
             : 'No more skips — let your muscles recover!'}
@@ -244,7 +244,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
         {canSkipRest && (
           <div className="flex flex-col items-center gap-2">
             <Button variant="secondary" onClick={skipRest}>SKIP REST</Button>
-            <p className="text-xs" style={{ color: 'var(--text-dim)' }}>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
               {MAX_REST_SKIPS - restSkipCount} skip{MAX_REST_SKIPS - restSkipCount !== 1 ? 's' : ''} remaining
             </p>
           </div>
@@ -258,10 +258,10 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
         <button onClick={onExit} className="text-sm min-w-[44px] min-h-[44px] flex items-center bg-transparent"
-          style={{ color: 'var(--text-mid)' }} aria-label="Exit workout">
+          style={{ color: 'var(--text-secondary)' }} aria-label="Exit workout">
           ← Exit
         </button>
-        <span className="text-sm" style={{ color: 'var(--text-dim)' }}>
+        <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
           {currentIndex + 1} / {total}
         </span>
       </div>
@@ -286,7 +286,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
                 {exerciseData.muscle}
               </p>
               <h2 className="text-3xl">{exerciseData.name}</h2>
-              <p className="text-lg mt-1" style={{ color: 'var(--text-mid)' }}>
+              <p className="text-lg mt-1" style={{ color: 'var(--text-secondary)' }}>
                 {exerciseData.sets}
               </p>
               {weightSuggestion && (
@@ -298,7 +298,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
 
             <div className="rounded-xl p-4" style={{ background: 'var(--bg-card)' }}>
               <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Form</p>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                 {exerciseData.form}
               </p>
             </div>
@@ -313,7 +313,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
             )}
 
             {!exerciseData.isWarmup && !exerciseData.isCooldown && (
-              <p className="text-xs italic" style={{ color: 'var(--text-dim)' }}>
+              <p className="text-xs italic" style={{ color: 'var(--text-muted)' }}>
                 Stop when you feel you could do 2-3 more reps. Muscle burn = normal. Sharp joint pain = stop immediately.
               </p>
             )}
@@ -349,7 +349,7 @@ export default function ActiveWorkout({ session, weekIndex, sessionIndex, onComp
                   ? 'var(--accent)'
                   : i === currentIndex
                     ? 'var(--text)'
-                    : 'var(--text-dim)',
+                    : 'var(--text-muted)',
               }}
               aria-label={`Exercise ${i + 1}`}
             />

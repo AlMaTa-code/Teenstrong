@@ -1,22 +1,24 @@
 @import "tailwindcss";
 
 :root {
+  /* KALDR Design System */
   --bg: #0d0d0f;
-  --bg-card: #18181c;
-  --bg-card-hover: #1f1f25;
+  --bg-card: #141418;
+  --bg-card-hover: #1a1a20;
   --accent: #00e676;
-  --accent-dim: rgba(0, 230, 118, 0.15);
+  --accent-dim: rgba(0, 230, 118, 0.12);
   --red: #ff3d3d;
   --red-dim: rgba(255, 61, 61, 0.12);
   --yellow: #ffd600;
   --blue: #448aff;
   --blue-dim: rgba(68, 138, 255, 0.12);
-  --orange: #FF9500;
-  --orange-dim: rgba(255, 149, 0, 0.15);
-  --text: #e8e8ed;
-  --text-dim: #7a7a8a;
-  --text-mid: #9b9bab;
-  --border: rgba(255,255,255,0.06);
+  --orange: #ff9800;
+  --orange-dim: rgba(255, 152, 0, 0.12);
+  --text: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #6b6b6b;
+  --border: rgba(255,255,255,0.08);
+  --radius: 12px;
 }
 
 * {
@@ -31,13 +33,14 @@ html, body, #root {
   background: var(--bg);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 button {
@@ -59,7 +62,7 @@ button:focus-visible {
   background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--text-dim);
+  background: var(--text-muted);
   border-radius: 2px;
 }
 

@@ -28,7 +28,7 @@ export default function ProgressScreen({ workoutState }) {
             <p className="text-3xl font-bold" style={{ color: stat.color, fontFamily: 'Bebas Neue' }}>
               {stat.value}{stat.unit ? <span className="text-lg"> {stat.unit}</span> : ''}
             </p>
-            <p className="text-sm" style={{ color: 'var(--text-dim)' }}>{stat.label}</p>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{stat.label}</p>
           </div>
         ))}
       </div>
@@ -36,7 +36,7 @@ export default function ProgressScreen({ workoutState }) {
       {/* Motivational Card */}
       <div className="rounded-2xl p-5" style={{ background: 'var(--bg-card)', borderLeft: '3px solid var(--orange)' }}>
         <h3 className="text-lg mb-2">WHY YOU'RE GETTING STRONGER</h3>
-        <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+        <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           You're building confidence, feeling powerful in your body, and getting stronger for sports and life. Every workout builds more than muscle — it builds better posture, energy, and self-belief. Great job, teen!
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function ProgressScreen({ workoutState }) {
       <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)' }}>
         <h2 className="text-xl mb-3">WORKOUT HISTORY</h2>
         {completedWorkouts.length === 0 ? (
-          <p className="text-sm" style={{ color: 'var(--text-dim)' }}>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
             No workouts completed yet. Start your first one from the Home tab!
           </p>
         ) : (
@@ -57,7 +57,7 @@ export default function ProgressScreen({ workoutState }) {
                   <p className="text-sm font-semibold">
                     Week {w.weekIndex + 1}, Session {w.sessionIndex + 1}
                   </p>
-                  <p className="text-xs" style={{ color: 'var(--text-dim)' }}>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                     {new Date(w.completedAt).toLocaleDateString()}
                   </p>
                 </div>

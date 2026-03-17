@@ -6,7 +6,7 @@ export default function ProgramScreen({ program, isWorkoutCompleted, onStartWork
   return (
     <div className="app-container flex flex-col gap-5 pb-24 px-4 pt-6">
       <h1 className="text-4xl">YOUR PROGRAM</h1>
-      <p className="text-sm" style={{ color: 'var(--text-dim)' }}>
+      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
         4-week progressive program based on AAP & NSCA guidelines. 3 sessions per week on non-consecutive days.
       </p>
 
@@ -35,14 +35,14 @@ export default function ProgramScreen({ program, isWorkoutCompleted, onStartWork
                   }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg" style={{ color: done ? 'var(--accent)' : 'var(--text-dim)' }}>
+                    <span className="text-lg" style={{ color: done ? 'var(--accent)' : 'var(--text-muted)' }}>
                       {done ? '✓' : '○'}
                     </span>
                     <div>
                       <p className="text-sm font-semibold" style={{ color: done ? 'var(--accent)' : 'var(--text)' }}>
                         {session.day}: {session.label}
                       </p>
-                      <p className="text-xs" style={{ color: 'var(--text-dim)' }}>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                         {session.exercises.length} exercises
                       </p>
                     </div>
