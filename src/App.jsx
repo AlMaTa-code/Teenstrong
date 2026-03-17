@@ -43,7 +43,7 @@ export default function App() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-        <div className="text-2xl" style={{ color: 'var(--accent)', fontFamily: 'Bebas Neue' }}>TEENSTRONG</div>
+        <div className="text-2xl" style={{ color: 'var(--accent)', fontFamily: 'Bebas Neue' }}>KALDR</div>
       </div>
     );
   }

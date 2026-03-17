@@ -1,5 +1,5 @@
-const PROFILE_KEY = 'teenstrong_profile';
-const STATE_KEY = 'teenstrong_state';
+const PROFILE_KEY = 'kaldr_profile';
+const STATE_KEY = 'kaldr_state';
 
 export function saveProfile(profile) {
   try {
@@ -43,7 +43,7 @@ export function clearAllData() {
   localStorage.removeItem(ANALYTICS_KEY);
 }
 
-const ANALYTICS_KEY = 'teenstrong_analytics';
+const ANALYTICS_KEY = 'kaldr_analytics';
 
 export function saveAnalyticsEvent(event) {
   try {

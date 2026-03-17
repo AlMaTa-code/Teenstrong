@@ -1,4 +1,4 @@
-const CACHE_NAME = 'teenstrong-v1';
+const CACHE_NAME = 'kaldr-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

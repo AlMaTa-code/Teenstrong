@@ -24,7 +24,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
     <div className="app-container flex flex-col gap-5 pb-24 px-4 pt-6">
       {/* Header */}
       <div>
-        <h1 className="text-4xl" style={{ color: 'var(--accent)' }}>TEENSTRONG</h1>
+        <h1 className="text-4xl" style={{ color: 'var(--accent)' }}>KALDR</h1>
         <p className="text-sm" style={{ color: 'var(--text-dim)' }}>
           {allDone ? 'Program Complete!' : `${currentWeek?.label || 'Your Program'}`}
         </p>
@@ -35,7 +35,7 @@ export default function HomeScreen({ profile, program, workoutState, isWorkoutCo
 
       {/* Disclaimer */}
       <p className="text-xs leading-relaxed" style={{ color: 'var(--text-dim)' }}>
-        TeenStrong is for educational purposes only — not medical advice. Talk to a parent/guardian and consider checking with a doctor before starting any new exercise program.
+        KALDR is for educational purposes only — not medical advice. Talk to a parent/guardian and consider checking with a doctor before starting any new exercise program.
       </p>
 
       {/* Today's Workout Card */}

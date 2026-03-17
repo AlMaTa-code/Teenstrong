@@ -151,7 +151,7 @@ export default function Onboarding({ onComplete }) {
               style={{ background: 'var(--accent-dim)' }}>
               💪
             </div>
-            <h1 className="text-5xl" style={{ color: 'var(--accent)' }}>TEENSTRONG</h1>
+            <h1 className="text-5xl" style={{ color: 'var(--accent)' }}>KALDR</h1>
             <p className="text-lg" style={{ color: 'var(--text-mid)' }}>
               Evidence-based strength training for teens. Build confidence, feel powerful in your body, and get stronger for sports and life.
             </p>
@@ -178,7 +178,7 @@ export default function Onboarding({ onComplete }) {
             {data.ageGroup === 'under12' && (
               <div className="rounded-xl p-4" style={{ background: 'var(--blue-dim)', border: '1px solid var(--blue)' }}>
                 <p className="text-sm" style={{ color: 'var(--blue)' }}>
-                  TeenStrong is designed for ages 12+. We recommend working with a coach in person for younger athletes.
+                  KALDR is designed for ages 12+. We recommend working with a coach in person for younger athletes.
                 </p>
               </div>
             )}

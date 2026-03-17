@@ -31,8 +31,8 @@ export function useProfile() {
   const resetProfile = useCallback(() => {
     setProfile(null);
     setProgram(null);
-    localStorage.removeItem('teenstrong_profile');
-    localStorage.removeItem('teenstrong_state');
+    localStorage.removeItem('kaldr_profile');
+    localStorage.removeItem('kaldr_state');
   }, []);
 
   return { profile, program, isLoading, createProfile, resetProfile };
